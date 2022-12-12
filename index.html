@@ -1,0 +1,155 @@
+.<!DOCTYPE html>
+<head>
+    <title>Genric Clicker</title>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/erosson/swarm-numberformat@v0.1.0/dist/swarm-numberformat.min.js"></script>
+    <script>
+    var clicker = {
+        generics:0,
+        upgrades: {
+            generics_machine:{
+                amount:0,
+                cost:10,
+                gps:1,
+                hasun: not = false,
+                unlocked: 1,
+                name:"Genric Machines"
+            },
+            generic_factory:{
+                amount:0,
+                cost:20,
+                gps:10,
+                hasun: not = false,
+                unlocked: 5,
+                name:"Genric Factory"
+            },
+
+            generic_printer:{
+                amount:0,
+                cost:50,
+                gps:20,
+                hasun: not = false,
+                unlocked: 30,
+                name:"Generic Printer"
+            },
+            generic_world:{
+                amount:0,
+                cost:100,
+                gps:50,
+                hasun: not = false,
+                unlocked: 100,
+                name:"Genric World"
+            },
+            generic_galaxy:{
+                amount:0,
+                cost:150,
+                gps:100,
+                hasun: not = false,
+                unlocked: 150,
+                name:"Generic Galaxy"
+            },
+            generic_Mulitverse:{
+                amount:0,
+                cost:200,
+                gps:200,
+                hasun: not = false,
+                unlocked: 250,
+                name:"Generic Multiverse"
+        },
+                generic_god:{
+                amount:0,
+                cost:250,
+                gps:250,
+                hasun: not = false,
+                unlocked: 250,
+                name:"Generic God"
+    },
+},
+        achevis:[{req:"clicker.generics>0",gotten:false,text:"You Opened My Game THX!!"},{req:"clicker.generics>0",gotten:false,text:"You Got One Generic!!"},
+        {req:"clicker.generics>9",gotten:false,text:"You Got Ten Generics!!"},{req:"clicker.generics>19",gotten:false,text:"You Got 20 Generics!"}
+        ,{req:"clicker.generics>29",gotten:false,text:"You Got 30 Generics!"},{req:"clicker.generics>49",gotten:false,text:"You Got 50 Generics!"}
+        ,{req:"clicker.generics>99",gotten:false,text:"You Got 100 Generics!"},{req:"clicker.generics>199",gotten:false,text:"You Got 200 Generics!"}
+        ,{req:"clicker.generics>249",gotten:false,text:"You Got 250 Generics!"},{req:"clicker.generics>499",gotten:false,text:"You Got 500 Generics!"}
+        ,{req:"clicker.generics>549",gotten:false,text:"You Got 550 Generics!"},{req:"clicker.generics>999",gotten:false,text:"You Got 1000 Generics!"}
+        ,{req:"clicker.generics>1199",gotten:false,text:"You Got 1200 Generics!"},{req:"clicker.generics>1299",gotten:false,text:"You Got 1300 Generics!"},
+        {req:"clicker.generics>1499",gotten:false,text:"You Got 1500 Generics!!"},{req:"clicker.generics>1999",gotten:false,text:"You Got 2 Thousand Generics!!"},
+        {req:"clicker.generics>9999",gotten:false,text:"You Got 10 Thousand Generics!!"},{req:"clicker.generics>99999",gotten:false,text:"You Got 100 THOUSAND Generics!!"},
+        {req:"clicker.generics>199999",gotten:false,text:"You Got 200 THOUSAND Generics!!"},{req:"clicker.generics>299999",gotten:false,text:"You Got 300 THOUSAND Generics!!"
+        },{req:"clicker.generics>499999",gotten:false,text:"You Got 400 THOUSAND Generics!!"}]
+    };
+    var delay = 0;
+    var gps = 0;
+    function thing_clicked(thing){
+        if(clicker.upgrades[thing].cost <= clicker.generics){
+            clicker.generics-= clicker.upgrades[thing].cost;
+       clicker.upgrades[thing].amount++;
+       clicker.upgrades[thing].cost += Math.round(clicker.upgrades[thing].cost*0.15);
+       update_upgrades();
+         }
+    }
+    function update_upgrades(){
+        document.querySelector("#upgrades").innerHTML="";
+        var d = 0;
+        for(i in clicker.upgrades){
+            if(clicker.upgrades[i].hasun){
+            document.querySelector("#upgrades").innerHTML+= `<br> <button onclick="thing_clicked('${i}')">
+                ${clicker.upgrades[i].name}</button> you have ${numberformat.format(clicker.upgrades[i].amount)}. 
+                Cost: ${clicker.upgrades[i].cost}`;
+                d+= clicker.upgrades[i].gps * clicker.upgrades[i].amount;
+            }
+        }
+        gps = d;
+    }
+    function updatecount() {
+        if(Cookies.get("clicker") != null && Cookies.get("clicker") != "undefined"){
+            var clicker1 = JSON.parse(Cookies.get("clicker"));
+            for(i in clicker.upgrades){
+                if(clicker1.upgrades[i] == null){
+                    clicker1.upgrades[i] = clicker.upgrades[i];
+                } 
+            }
+            clicker = clicker1;
+        for(i in clicker.achevis){
+            if(clicker1.achevis[i] == null || clicker.achevis[i].text != clicker1.achevis[i].text){
+                clicker1.achevis[i] = clicker.achevis[i]
+            }
+        }
+        clicker = clicker1;
+    }
+        update_upgrades();
+        setInterval(() => {
+    for(i in clicker.upgrades){
+clicker.generics+=clicker.upgrades[i].amount*clicker.upgrades[i].gps/20
+    }
+    for(i in clicker.achevis){
+        var b = new Function('return '+clicker.achevis[i].req);
+        if(b() && !clicker.achevis[i].gotten){
+            clicker.achevis[i].gotten = true;
+            document.querySelector("#acheivs").innerHTML+=`<br>ACHEIVEMENT UNLOCKED<br>${clicker.achevis[i].text}`
+        }
+    }
+    document.querySelector("#generics").innerHTML = "You have "+numberformat.format (Number(String(clicker.generics).
+    split(".")[0]))+ " generics"
+    for(i in clicker.upgrades){
+        if(!clicker.upgrades[i].hasun && clicker.upgrades[i].unlocked <= clicker.generics){
+            clicker.upgrades[i].hasun = true;
+            update_upgrades();
+        }
+    }
+    delay++;
+    if(delay >= 40){
+        Cookies.set("clicker",JSON.stringify(clicker), {expires: 100000000});
+        delay = 0;
+    }
+},50);
+}
+</script>
+</head>
+<body onload="updatecount()">
+    <h1 id="generics">You have 0 Generics</h1>
+    <button onclick="clicker.generics++">Get 1 Generic</button>
+    <div id="upgrades">
+    </div>
+    <br>
+<div id="acheivs"  style="width: 400px; height:300px; overflow:scroll"></div>
+</body>
